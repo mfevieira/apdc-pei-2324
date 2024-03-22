@@ -29,6 +29,7 @@ public class RegisterResource {
 	/** The data store to store users in */
 	private static final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 
+	/** The User kind key factory */
 	private static final KeyFactory userKeyFactory = datastore.newKeyFactory().setKind("User");
 
 	/** The Object to create JSON responses */
