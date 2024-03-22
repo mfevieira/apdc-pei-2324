@@ -14,7 +14,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import com.google.cloud.Timestamp;
 import com.google.cloud.datastore.*;
-import com.google.gson.Gson;
 
 import pt.unl.fct.di.apdc.firstwebapp.util.LoginData;
 import pt.unl.fct.di.apdc.firstwebapp.util.RegisterData;
@@ -31,9 +30,6 @@ public class RegisterResource {
 
 	/** The User kind key factory */
 	private static final KeyFactory userKeyFactory = datastore.newKeyFactory().setKind("User");
-
-	/** The Object to create JSON responses */
-	private final Gson g = new Gson();
 
 	public RegisterResource() {
 	}
