@@ -3,3 +3,4 @@ indexes:
   ancestor: yes
   properties:
   - name: loginTime
+    direction: desc

@@ -90,6 +90,14 @@ public class LoginResource {
 			}
 			String hashedPassword = (String) user.getString("password");
 			if ( hashedPassword.equals(DigestUtils.sha3_512Hex(data.password)) ) {
+				KeyFactory logKeyFactory = datastore.newKeyFactory()
+						.addAncestor(PathElement.of("User", data.username))
+						.setKind("UserLog");
+				Key logKey = datastore.allocateId(logKeyFactory.newKey());
+				Entity userLog = Entity.newBuilder(logKey)
+						.set("loginTime", Timestamp.now())
+						.build();
+				txn.put(userLog);
 				txn.commit();
 				AuthToken at = new AuthToken(data.username);
 				LOG.info("User '" + data.username + "' logged in successfully.");
@@ -223,7 +231,7 @@ public class LoginResource {
 				        		PropertyFilter.hasAncestor(userKey),
 				        		PropertyFilter.ge("loginTime", Timestamp.of(
 								new Date(System.currentTimeMillis() - HOURS24)))))
-				        .setOrderBy(OrderBy.asc("created"))
+				        .setOrderBy(OrderBy.desc("created"))
 				        .setProjection("loginTime")
 				        .build();
 				List<Timestamp> timestamps = new LinkedList<>();
@@ -238,7 +246,7 @@ public class LoginResource {
 								PropertyFilter.hasAncestor(userKey), 
 								PropertyFilter.ge("loginTime", Timestamp.of(
 								new Date(System.currentTimeMillis() - HOURS24)))))
-						.setOrderBy(OrderBy.asc("created"))
+						.setOrderBy(OrderBy.desc("created"))
 						.build();
 				QueryResults<Entity> logs = txn.run(query);*/
 				txn.commit();
